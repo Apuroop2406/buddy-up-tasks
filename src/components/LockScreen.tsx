@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Lock, Upload, AlertTriangle, Clock } from 'lucide-react';
+import { Lock, Upload, AlertTriangle, Clock, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useTasks, Task } from '@/hooks/useTasks';
+import { Task } from '@/hooks/useTasks';
 
 interface LockScreenProps {
   pendingTask: Task;
@@ -97,11 +97,29 @@ const LockScreen: React.FC<LockScreenProps> = ({ pendingTask, onSubmitProof }) =
           </Button>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="glass rounded-xl p-4 mt-6 text-left"
+        >
+          <div className="flex items-center gap-3 mb-2">
+            <Smartphone className="w-5 h-5 text-accent" />
+            <span className="font-semibold text-locked-foreground text-sm">
+              Device Locked
+            </span>
+          </div>
+          <p className="text-locked-foreground/60 text-xs">
+            Social media & games are restricted until this task is approved. 
+            Submit valid proof to unlock your device features! 📱
+          </p>
+        </motion.div>
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="text-locked-foreground/50 text-sm mt-6"
+          transition={{ delay: 0.8 }}
+          className="text-locked-foreground/50 text-sm mt-4"
         >
           Your friend is counting on you! 👀
         </motion.p>

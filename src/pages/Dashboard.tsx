@@ -26,6 +26,15 @@ const Dashboard: React.FC = () => {
   const overdueTasks = pendingTasks.filter(t => new Date(t.deadline) < new Date());
   const shouldBeLocked = overdueTasks.length > 0;
 
+  // Auto-show lock screen when there are overdue tasks
+  React.useEffect(() => {
+    if (shouldBeLocked && !proofTaskId) {
+      setShowLock(true);
+    } else if (!shouldBeLocked) {
+      setShowLock(false);
+    }
+  }, [shouldBeLocked, proofTaskId]);
+
   const handleDelete = async (id: string) => {
     await deleteTask.mutateAsync(id);
     toast.success('Task deleted');

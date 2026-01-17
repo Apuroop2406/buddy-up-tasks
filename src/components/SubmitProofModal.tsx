@@ -152,12 +152,13 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
             className="fixed inset-0 bg-foreground/20 backdrop-blur-sm z-40"
             onClick={onClose}
           />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed inset-x-4 top-1/2 -translate-y-1/2 max-w-lg mx-auto bg-card rounded-2xl shadow-lg z-50 max-h-[90vh] overflow-y-auto"
-          >
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="w-full max-w-lg bg-card rounded-2xl shadow-lg max-h-[85vh] overflow-y-auto"
+            >
             <div className="p-6">
               {isVerifying || verificationResult ? (
                 <div className="text-center py-8">
@@ -284,7 +285,8 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
                 </>
               )}
             </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </>
       )}
     </AnimatePresence>
