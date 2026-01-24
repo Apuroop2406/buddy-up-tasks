@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, FileText, Image, Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { X, Upload, FileText, Image, Loader2, CheckCircle, XCircle, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -14,9 +14,24 @@ interface SubmitProofModalProps {
   onClose: () => void;
   taskId: string | null;
   taskTitle: string;
+  taskDescription?: string;
+  taskType?: string;
 }
 
-const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, taskId, taskTitle }) => {
+interface VerificationDetails {
+  confidence: number;
+  matchedKeywords: string[];
+  concerns: string[];
+}
+
+const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ 
+  isOpen, 
+  onClose, 
+  taskId, 
+  taskTitle,
+  taskDescription,
+  taskType = 'assignment'
+}) => {
   const { user } = useAuth();
   const { submitProof, updateTask } = useTasks();
   const [proofText, setProofText] = useState('');
@@ -24,6 +39,8 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
   const [isUploading, setIsUploading] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationResult, setVerificationResult] = useState<'approved' | 'rejected' | null>(null);
+  const [verificationDetails, setVerificationDetails] = useState<VerificationDetails | null>(null);
+  const [aiFeedback, setAiFeedback] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,25 +54,38 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
     }
   };
 
-  const simulateAIVerification = async (hasProof: boolean): Promise<{ approved: boolean; feedback: string }> => {
-    // Simulate AI verification delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // For demo purposes, approve if there's substantial proof
-    if (hasProof && (proofText.length > 20 || file)) {
-      return {
-        approved: true,
-        feedback: 'Great job! Your proof has been verified. Keep up the excellent work! 🎉',
-      };
-    } else if (hasProof) {
-      return {
-        approved: false,
-        feedback: 'Please provide more detailed proof of your work. Add a longer description or upload a file showing your completed work.',
-      };
+  const verifyWithAI = async (proofUrl?: string): Promise<{ 
+    approved: boolean; 
+    feedback: string;
+    confidence: number;
+    matchedKeywords: string[];
+    concerns: string[];
+  }> => {
+    const { data, error } = await supabase.functions.invoke('verify-proof', {
+      body: {
+        taskTitle,
+        taskDescription,
+        taskType,
+        proofText,
+        proofUrl,
+      },
+    });
+
+    if (error) {
+      console.error('AI verification error:', error);
+      throw new Error('Verification failed. Please try again.');
     }
+
+    if (!data.success) {
+      throw new Error(data.error || 'Verification failed');
+    }
+
     return {
-      approved: false,
-      feedback: 'No proof provided. Please submit evidence of your completed work.',
+      approved: data.approved,
+      feedback: data.feedback,
+      confidence: data.confidence || 0,
+      matchedKeywords: data.matchedKeywords || [],
+      concerns: data.concerns || [],
     };
   };
 
@@ -100,8 +130,16 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
       setIsUploading(false);
       setIsVerifying(true);
 
-      // Simulate AI verification
-      const result = await simulateAIVerification(!!(proofText || file));
+      // Real AI verification
+      const result = await verifyWithAI(proofUrl);
+      
+      // Store verification details
+      setVerificationDetails({
+        confidence: result.confidence,
+        matchedKeywords: result.matchedKeywords,
+        concerns: result.concerns,
+      });
+      setAiFeedback(result.feedback);
       
       // Update task with verification result
       await updateTask.mutateAsync({
@@ -116,7 +154,7 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
       setVerificationResult(result.approved ? 'approved' : 'rejected');
 
       if (result.approved) {
-        toast.success('🎉 Task approved! You earned 10 points!');
+        toast.success(`🎉 Task approved! Confidence: ${result.confidence}%`);
       } else {
         toast.error(result.feedback);
       }
@@ -125,11 +163,13 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
       setTimeout(() => {
         onClose();
         resetForm();
-      }, 2000);
+      }, 3500);
 
     } catch (error) {
-      toast.error('Failed to submit proof');
+      console.error('Proof submission error:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to submit proof');
       setIsUploading(false);
+      setIsVerifying(false);
     }
   };
 
@@ -139,6 +179,8 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
     setIsUploading(false);
     setIsVerifying(false);
     setVerificationResult(null);
+    setVerificationDetails(null);
+    setAiFeedback('');
   };
 
   return (
@@ -161,12 +203,15 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
             >
             <div className="p-6">
               {isVerifying || verificationResult ? (
-                <div className="text-center py-8">
+                <div className="text-center py-6">
                   {isVerifying && !verificationResult && (
                     <>
-                      <Loader2 className="w-16 h-16 mx-auto text-primary animate-spin mb-4" />
-                      <h2 className="text-xl font-bold text-foreground mb-2">AI Verifying...</h2>
-                      <p className="text-muted-foreground">Checking your submission</p>
+                      <div className="relative w-20 h-20 mx-auto mb-4">
+                        <Loader2 className="w-20 h-20 text-primary animate-spin" />
+                        <ShieldCheck className="w-8 h-8 text-primary absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                      </div>
+                      <h2 className="text-xl font-bold text-foreground mb-2">AI Analyzing Your Proof...</h2>
+                      <p className="text-muted-foreground text-sm">Checking relevance to: "{taskTitle}"</p>
                     </>
                   )}
                   {verificationResult === 'approved' && (
@@ -178,8 +223,27 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
                       <div className="w-20 h-20 mx-auto bg-success/20 rounded-full flex items-center justify-center mb-4">
                         <CheckCircle className="w-12 h-12 text-success" />
                       </div>
-                      <h2 className="text-xl font-bold text-success mb-2">Approved! 🎉</h2>
-                      <p className="text-muted-foreground">Great work! +10 points earned</p>
+                      <h2 className="text-xl font-bold text-success mb-2">Verified & Approved! 🎉</h2>
+                      {verificationDetails && (
+                        <div className="mt-4 space-y-3 text-left">
+                          <div className="bg-success/10 rounded-lg p-3">
+                            <p className="text-sm text-foreground font-medium">Confidence: {verificationDetails.confidence}%</p>
+                          </div>
+                          {verificationDetails.matchedKeywords.length > 0 && (
+                            <div className="bg-muted rounded-lg p-3">
+                              <p className="text-xs text-muted-foreground mb-2">Matched Keywords:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {verificationDetails.matchedKeywords.map((keyword, i) => (
+                                  <span key={i} className="px-2 py-0.5 bg-primary/20 text-primary text-xs rounded-full">
+                                    {keyword}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                          <p className="text-sm text-muted-foreground">{aiFeedback}</p>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                   {verificationResult === 'rejected' && (
@@ -191,8 +255,29 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({ isOpen, onClose, ta
                       <div className="w-20 h-20 mx-auto bg-destructive/20 rounded-full flex items-center justify-center mb-4">
                         <XCircle className="w-12 h-12 text-destructive" />
                       </div>
-                      <h2 className="text-xl font-bold text-destructive mb-2">Needs More Work</h2>
-                      <p className="text-muted-foreground">Please provide more detailed proof</p>
+                      <h2 className="text-xl font-bold text-destructive mb-2">Verification Failed</h2>
+                      {verificationDetails && (
+                        <div className="mt-4 space-y-3 text-left">
+                          <div className="bg-destructive/10 rounded-lg p-3">
+                            <p className="text-sm text-foreground font-medium">Confidence: {verificationDetails.confidence}%</p>
+                          </div>
+                          {verificationDetails.concerns.length > 0 && (
+                            <div className="bg-muted rounded-lg p-3">
+                              <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+                                <AlertTriangle className="w-3 h-3" /> Issues Found:
+                              </p>
+                              <ul className="text-xs text-foreground space-y-1">
+                                {verificationDetails.concerns.map((concern, i) => (
+                                  <li key={i} className="flex items-start gap-1">
+                                    <span className="text-destructive">•</span> {concern}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                          <p className="text-sm text-muted-foreground">{aiFeedback}</p>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </div>

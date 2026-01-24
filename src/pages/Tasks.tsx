@@ -69,7 +69,14 @@ const Tasks: React.FC = () => {
       </motion.div>
       <BottomNav />
       <CreateTaskModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
-      <SubmitProofModal isOpen={!!proofTaskId} onClose={() => setProofTaskId(null)} taskId={proofTaskId} taskTitle={selectedTask?.title || ''} />
+      <SubmitProofModal 
+        isOpen={!!proofTaskId} 
+        onClose={() => setProofTaskId(null)} 
+        taskId={proofTaskId} 
+        taskTitle={selectedTask?.title || ''} 
+        taskDescription={selectedTask?.description || undefined}
+        taskType={selectedTask?.task_type}
+      />
     </div>
   );
 };
