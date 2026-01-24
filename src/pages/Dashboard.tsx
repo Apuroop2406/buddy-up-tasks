@@ -161,6 +161,8 @@ const Dashboard: React.FC = () => {
         onClose={() => setProofTaskId(null)}
         taskId={proofTaskId}
         taskTitle={selectedTask?.title || ''}
+        taskDescription={selectedTask?.description || undefined}
+        taskType={selectedTask?.task_type}
       />
     </>
   );
