@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Users, Target, Trophy, Lock, Sparkles } from 'lucide-react';
+import { ArrowRight, Users, Target, Trophy, Lock, Sparkles, Mail, MapPin, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import Header from '@/components/Header';
 
 const Landing: React.FC = () => {
   return (
@@ -14,11 +15,14 @@ const Landing: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative px-4 py-8 pb-20">
+      {/* Header */}
+      <Header variant="landing" />
+
+      <div className="relative px-4 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-lg mx-auto text-center pt-12"
+          className="max-w-lg mx-auto text-center pt-8"
         >
           <motion.div
             initial={{ scale: 0, rotate: -180 }}
@@ -51,7 +55,8 @@ const Landing: React.FC = () => {
             Beat procrastination with peer accountability. Complete tasks, submit proof, unlock your potential.
           </p>
 
-          <div className="grid grid-cols-2 gap-4 mb-10">
+          {/* Features Section */}
+          <div id="features" className="grid grid-cols-2 gap-4 mb-10">
             {[
               { icon: Users, title: 'Peer Power', desc: 'Stay accountable together', color: 'from-primary/10 to-primary/5' },
               { icon: Target, title: 'Smart Goals', desc: 'Track every deadline', color: 'from-accent/10 to-accent/5' },
@@ -101,6 +106,78 @@ const Landing: React.FC = () => {
             🔥 Join <span className="font-semibold text-foreground">1,000+</span> students crushing their goals
           </motion.p>
         </motion.div>
+
+        {/* About Section */}
+        <motion.section 
+          id="about"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2 }}
+          className="max-w-lg mx-auto mt-20 text-center"
+        >
+          <h2 className="text-2xl font-bold text-foreground mb-4">About Deadline Friend</h2>
+          <p className="text-muted-foreground mb-6">
+            We're a team of students who struggled with procrastination ourselves. We built Deadline Friend to help 
+            students stay accountable through peer support, AI-powered verification, and gamification. 
+            Our mission is to help you unlock your full potential!
+          </p>
+          <div className="flex justify-center gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-primary">1K+</div>
+              <div className="text-xs text-muted-foreground">Active Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-accent">50K+</div>
+              <div className="text-xs text-muted-foreground">Tasks Completed</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-success">95%</div>
+              <div className="text-xs text-muted-foreground">Success Rate</div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Contact Section */}
+        <motion.section 
+          id="contact"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4 }}
+          className="max-w-lg mx-auto mt-16 mb-10"
+        >
+          <div className="card-elevated p-6 text-center">
+            <h2 className="text-2xl font-bold text-foreground mb-4">Get in Touch</h2>
+            <p className="text-muted-foreground mb-6">
+              Have questions or feedback? We'd love to hear from you!
+            </p>
+            <div className="space-y-3">
+              <a 
+                href="mailto:hello@deadlinefriend.app" 
+                className="flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors"
+              >
+                <Mail className="w-5 h-5 text-primary" />
+                <span className="text-foreground font-medium">hello@deadlinefriend.app</span>
+              </a>
+              <div className="flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-secondary/30">
+                <MapPin className="w-5 h-5 text-muted-foreground" />
+                <span className="text-muted-foreground">San Francisco, CA</span>
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Footer */}
+        <footer className="max-w-lg mx-auto text-center pt-8 border-t border-border">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+              <span className="text-xs">🎯</span>
+            </div>
+            <span className="font-bold text-foreground">Deadline Friend</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            © 2026 Deadline Friend. Built with ❤️ for students.
+          </p>
+        </footer>
       </div>
     </div>
   );
