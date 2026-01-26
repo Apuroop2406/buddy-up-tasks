@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import Header from '@/components/Header';
+import InstallPrompt from '@/components/InstallPrompt';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -39,6 +40,9 @@ const Login: React.FC = () => {
 
       {/* Header */}
       <Header variant="auth" />
+
+      {/* Install Prompt */}
+      <InstallPrompt />
 
       <div className="relative px-4 py-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
