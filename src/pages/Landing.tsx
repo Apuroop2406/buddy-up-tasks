@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Users, Target, Trophy, Lock, Sparkles, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowRight, Users, Target, Trophy, Lock, Sparkles, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
+import InstallPrompt from '@/components/InstallPrompt';
 
 const Landing: React.FC = () => {
   return (
@@ -17,6 +18,9 @@ const Landing: React.FC = () => {
 
       {/* Header */}
       <Header variant="landing" />
+
+      {/* Install Prompt Popup */}
+      <InstallPrompt />
 
       <div className="relative px-4 pb-20">
         <motion.div
