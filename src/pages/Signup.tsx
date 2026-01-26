@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Mail, Lock, User, Loader2, Rocket } from 'lucide-react';
+import { Mail, Lock, User, Loader2, Rocket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import Header from '@/components/Header';
 
 const Signup: React.FC = () => {
   const [fullName, setFullName] = useState('');
@@ -42,12 +43,11 @@ const Signup: React.FC = () => {
         <div className="absolute top-1/3 right-0 w-64 h-64 bg-gradient-to-l from-warning/15 to-transparent rounded-full blur-2xl" />
       </div>
 
-      <div className="relative px-4 py-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
-          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8 group">
-            <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" /> Back
-          </Link>
+      {/* Header */}
+      <Header variant="auth" />
 
+      <div className="relative px-4 py-4">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
           <div className="text-center mb-10">
             <motion.div 
               initial={{ scale: 0, rotate: -180 }}

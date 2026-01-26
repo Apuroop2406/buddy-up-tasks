@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Mail, Lock, Loader2, Sparkles } from 'lucide-react';
+import { Mail, Lock, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import Header from '@/components/Header';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -36,12 +37,11 @@ const Login: React.FC = () => {
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-accent/20 to-primary/20 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative px-4 py-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
-          <Link to="/" className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors mb-8 group">
-            <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" /> Back
-          </Link>
+      {/* Header */}
+      <Header variant="auth" />
 
+      <div className="relative px-4 py-4">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-md mx-auto">
           <div className="text-center mb-10">
             <motion.div 
               initial={{ scale: 0 }}
