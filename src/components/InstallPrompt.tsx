@@ -20,6 +20,8 @@ const InstallPrompt: React.FC = () => {
                        (window.navigator as any).standalone === true;
     setIsStandalone(standalone);
 
+    if (standalone) return;
+
     // Check if iOS
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     setIsIOS(iOS);
@@ -28,22 +30,42 @@ const InstallPrompt: React.FC = () => {
     const dismissed = localStorage.getItem('install-prompt-dismissed');
     const dismissedTime = dismissed ? parseInt(dismissed) : 0;
     const daysSinceDismissed = (Date.now() - dismissedTime) / (1000 * 60 * 60 * 24);
+    const shouldShowPrompt = daysSinceDismissed > 7;
 
-    // Show prompt after 3 seconds if not dismissed in last 7 days and not standalone
-    if (!standalone && daysSinceDismissed > 7) {
-      const timer = setTimeout(() => {
-        setShowPrompt(true);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-
-    // Listen for beforeinstallprompt
+    // Listen for beforeinstallprompt (must be set up immediately)
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
+      // Show prompt after capturing the event (if not recently dismissed)
+      if (shouldShowPrompt) {
+        setShowPrompt(true);
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handler);
+
+    // For iOS or if no beforeinstallprompt, show after delay
+    if (iOS && shouldShowPrompt) {
+      const timer = setTimeout(() => {
+        setShowPrompt(true);
+      }, 2000);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('beforeinstallprompt', handler);
+      };
+    }
+
+    // For Android/Chrome - also trigger after delay if event doesn't fire
+    if (!iOS && shouldShowPrompt) {
+      const timer = setTimeout(() => {
+        setShowPrompt(true);
+      }, 3000);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('beforeinstallprompt', handler);
+      };
+    }
+
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
@@ -112,10 +134,10 @@ const InstallPrompt: React.FC = () => {
 
                 {/* Content */}
                 <h3 className="text-xl font-bold text-foreground text-center mb-2">
-                  Get the App! 📱
+                  📲 Install the App!
                 </h3>
                 <p className="text-muted-foreground text-center text-sm mb-5">
-                  Install Deadline Friend for a better experience with offline access and faster loading.
+                  Add Deadline Friend to your home screen for the best experience with offline access and instant loading.
                 </p>
 
                 {/* Install instructions based on platform */}
@@ -150,13 +172,31 @@ const InstallPrompt: React.FC = () => {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    <Button
-                      onClick={deferredPrompt ? handleInstall : handleDismiss}
-                      className="btn-accent w-full py-6 text-lg font-bold"
-                    >
-                      <Download className="w-5 h-5 mr-2" />
-                      Install App
-                    </Button>
+                    {deferredPrompt ? (
+                      <Button
+                        onClick={handleInstall}
+                        className="btn-accent w-full py-6 text-lg font-bold"
+                      >
+                        <Download className="w-5 h-5 mr-2" />
+                        Install Now
+                      </Button>
+                    ) : (
+                      <div className="bg-secondary/50 rounded-xl p-4">
+                        <p className="text-sm text-foreground font-medium mb-3">
+                          To install on Android:
+                        </p>
+                        <ol className="space-y-2 text-sm text-muted-foreground">
+                          <li className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">1</span>
+                            Tap the browser menu (⋮)
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">2</span>
+                            Tap "Install app" or "Add to Home Screen"
+                          </li>
+                        </ol>
+                      </div>
+                    )}
                     <Button
                       onClick={handleDismiss}
                       variant="ghost"
