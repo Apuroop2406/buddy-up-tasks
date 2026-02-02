@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import BottomNav from '@/components/BottomNav';
+import NotificationToggle from '@/components/NotificationToggle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useProfile } from '@/hooks/useProfile';
 import { useTasks } from '@/hooks/useTasks';
@@ -79,7 +80,10 @@ const Profile: React.FC = () => {
           </div>
         </div>
 
-        <div className="card-elevated p-6 space-y-5">
+        {/* Notification Settings */}
+        <NotificationToggle />
+
+        <div className="card-elevated p-6 space-y-5 mt-6">
           <div>
             <Label className="text-foreground font-medium">Username</Label>
             <Input value={username} onChange={(e) => setUsername(e.target.value)} className="input-field mt-2" placeholder="@username" />
