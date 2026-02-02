@@ -110,6 +110,36 @@ export type Database = {
         }
         Relationships: []
       }
+      push_subscriptions: {
+        Row: {
+          auth: string
+          created_at: string
+          endpoint: string
+          id: string
+          p256dh: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auth: string
+          created_at?: string
+          endpoint: string
+          id?: string
+          p256dh: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auth?: string
+          created_at?: string
+          endpoint?: string
+          id?: string
+          p256dh?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           ai_feedback: string | null
@@ -123,6 +153,7 @@ export type Database = {
           points_earned: number | null
           proof_text: string | null
           proof_url: string | null
+          reminder_sent: boolean | null
           status: Database["public"]["Enums"]["task_status"] | null
           submitted_at: string | null
           task_type: Database["public"]["Enums"]["task_type"] | null
@@ -142,6 +173,7 @@ export type Database = {
           points_earned?: number | null
           proof_text?: string | null
           proof_url?: string | null
+          reminder_sent?: boolean | null
           status?: Database["public"]["Enums"]["task_status"] | null
           submitted_at?: string | null
           task_type?: Database["public"]["Enums"]["task_type"] | null
@@ -161,6 +193,7 @@ export type Database = {
           points_earned?: number | null
           proof_text?: string | null
           proof_url?: string | null
+          reminder_sent?: boolean | null
           status?: Database["public"]["Enums"]["task_status"] | null
           submitted_at?: string | null
           task_type?: Database["public"]["Enums"]["task_type"] | null
