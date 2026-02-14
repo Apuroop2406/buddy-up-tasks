@@ -1,12 +1,24 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Users, Target, Trophy, Lock, Sparkles, Mail, MapPin } from 'lucide-react';
+import { ArrowRight, Users, Target, Trophy, Lock, Sparkles, Mail, MapPin, Download, Share } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import InstallPrompt from '@/components/InstallPrompt';
+import { useInstallPrompt } from '@/hooks/useInstallPrompt';
 
 const Landing: React.FC = () => {
+  const { canInstall, isIOS, isStandalone, install } = useInstallPrompt();
+
+  const handleDownload = async () => {
+    if (canInstall) {
+      await install();
+    } else if (isIOS) {
+      alert('Tap the Share button in Safari, then tap "Add to Home Screen" to install.');
+    } else {
+      alert('Open your browser menu and tap "Install app" or "Add to Home Screen".');
+    }
+  };
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Decorative background elements */}
@@ -94,6 +106,16 @@ const Landing: React.FC = () => {
                 Get Started Free <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
+            {!isStandalone && (
+              <Button
+                onClick={handleDownload}
+                variant="outline"
+                className="w-full text-lg py-7 font-bold border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              >
+                <Download className="w-5 h-5 mr-2" />
+                Download App
+              </Button>
+            )}
             <Link to="/login" className="block">
               <Button variant="ghost" className="w-full text-muted-foreground hover:text-foreground hover:bg-secondary/50">
                 Already have an account? <span className="text-primary font-semibold ml-1">Sign in</span>
