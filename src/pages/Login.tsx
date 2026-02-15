@@ -9,8 +9,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 import Header from '@/components/Header';
 import InstallPrompt from '@/components/InstallPrompt';
+import { useTranslation } from 'react-i18next';
 
 const Login: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -25,23 +27,19 @@ const Login: React.FC = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success('Welcome back! 👋');
+      toast.success(t('login.welcomeToast'));
       navigate('/dashboard');
     }
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Decorative background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-primary/25 to-accent/20 rounded-full blur-3xl" />
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-accent/20 to-primary/20 rounded-full blur-3xl" />
       </div>
 
-      {/* Header */}
       <Header variant="auth" />
-
-      {/* Install Prompt */}
       <InstallPrompt />
 
       <div className="relative px-4 py-4">
@@ -56,8 +54,8 @@ const Login: React.FC = () => {
               <span className="text-4xl">🎯</span>
               <div className="absolute -inset-1 rounded-2xl bg-primary/20 blur-lg -z-10" />
             </motion.div>
-            <h1 className="text-3xl font-extrabold text-foreground mb-2">Welcome Back</h1>
-            <p className="text-muted-foreground">Sign in to continue your streak 🔥</p>
+            <h1 className="text-3xl font-extrabold text-foreground mb-2">{t('login.welcomeBack')}</h1>
+            <p className="text-muted-foreground">{t('login.continueStreak')}</p>
           </div>
 
           <motion.div
@@ -69,37 +67,21 @@ const Login: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Label htmlFor="email" className="text-foreground font-semibold flex items-center gap-2 mb-2">
-                  <Mail className="w-4 h-4 text-primary" /> Email
+                  <Mail className="w-4 h-4 text-primary" /> {t('login.email')}
                 </Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)} 
-                  className="input-field" 
-                  placeholder="you@example.com" 
-                  required 
-                />
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-field" placeholder="you@example.com" required />
               </div>
               <div>
                 <Label htmlFor="password" className="text-foreground font-semibold flex items-center gap-2 mb-2">
-                  <Lock className="w-4 h-4 text-primary" /> Password
+                  <Lock className="w-4 h-4 text-primary" /> {t('login.password')}
                 </Label>
-                <Input 
-                  id="password" 
-                  type="password" 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
-                  className="input-field" 
-                  placeholder="••••••••" 
-                  required 
-                />
+                <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="input-field" placeholder="••••••••" required />
               </div>
               <Button type="submit" className="btn-primary w-full py-6 text-lg font-bold" disabled={isLoading}>
                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                   <>
                     <Sparkles className="w-5 h-5 mr-2" />
-                    Sign In
+                    {t('login.signInBtn')}
                   </>
                 )}
               </Button>
@@ -112,9 +94,9 @@ const Login: React.FC = () => {
             transition={{ delay: 0.4 }}
             className="text-center text-muted-foreground mt-8"
           >
-            Don't have an account?{' '}
+            {t('login.noAccount')}{' '}
             <Link to="/signup" className="text-primary font-bold hover:underline">
-              Sign up free
+              {t('login.signUpFree')}
             </Link>
           </motion.p>
         </motion.div>

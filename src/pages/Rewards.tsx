@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Lock, Star, Flame, Target, Medal } from 'lucide-react';
+import { Trophy, Lock } from 'lucide-react';
 import BottomNav from '@/components/BottomNav';
 import { useProfile } from '@/hooks/useProfile';
 import { useTasks } from '@/hooks/useTasks';
+import { useTranslation } from 'react-i18next';
 
 const badges = [
   { id: 1, name: 'First Step', icon: '🎯', points: 10, desc: 'Complete your first task' },
@@ -14,6 +15,7 @@ const badges = [
 ];
 
 const Rewards: React.FC = () => {
+  const { t } = useTranslation();
   const { profile } = useProfile();
   const { completedTasks } = useTasks();
   const totalPoints = completedTasks.reduce((sum, t) => sum + t.points_earned, 0);
@@ -21,15 +23,15 @@ const Rewards: React.FC = () => {
   return (
     <div className="min-h-screen px-4 py-6 pb-24">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-lg mx-auto">
-        <h1 className="text-2xl font-bold text-foreground mb-6">Rewards</h1>
+        <h1 className="text-2xl font-bold text-foreground mb-6">{t('rewards.title')}</h1>
 
         <div className="card-elevated p-6 mb-6 text-center">
           <Trophy className="w-12 h-12 text-accent mx-auto mb-3" />
           <div className="text-4xl font-bold text-foreground">{totalPoints}</div>
-          <p className="text-muted-foreground">Total Points Earned</p>
+          <p className="text-muted-foreground">{t('rewards.totalPoints')}</p>
         </div>
 
-        <h2 className="text-lg font-semibold text-foreground mb-4">Badges</h2>
+        <h2 className="text-lg font-semibold text-foreground mb-4">{t('rewards.badges')}</h2>
         <div className="grid gap-4">
           {badges.map((badge, i) => {
             const isUnlocked = totalPoints >= badge.points;
@@ -50,7 +52,7 @@ const Rewards: React.FC = () => {
                 </div>
                 <div className="text-right">
                   <div className={`text-sm font-medium ${isUnlocked ? 'text-success' : 'text-muted-foreground'}`}>
-                    {isUnlocked ? '✓ Unlocked' : `${badge.points} pts`}
+                    {isUnlocked ? t('rewards.unlocked') : t('rewards.pts', { points: badge.points })}
                   </div>
                 </div>
               </motion.div>

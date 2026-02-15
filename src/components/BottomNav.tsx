@@ -2,16 +2,18 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Home, ListTodo, User, Trophy } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-
-const navItems = [
-  { icon: Home, label: 'Home', path: '/dashboard' },
-  { icon: ListTodo, label: 'Tasks', path: '/tasks' },
-  { icon: Trophy, label: 'Rewards', path: '/rewards' },
-  { icon: User, label: 'Profile', path: '/profile' },
-];
+import { useTranslation } from 'react-i18next';
 
 const BottomNav: React.FC = () => {
   const location = useLocation();
+  const { t } = useTranslation();
+
+  const navItems = [
+    { icon: Home, label: t('nav.home'), path: '/dashboard' },
+    { icon: ListTodo, label: t('nav.tasks'), path: '/tasks' },
+    { icon: Trophy, label: t('nav.rewards'), path: '/rewards' },
+    { icon: User, label: t('nav.profile'), path: '/profile' },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-30 glass border-t border-border/50 safe-area-bottom">
