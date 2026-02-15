@@ -11,8 +11,10 @@ import FocusModeGuide from '@/components/FocusModeGuide';
 import { useProfile } from '@/hooks/useProfile';
 import { useTasks } from '@/hooks/useTasks';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const { profile } = useProfile();
   const { tasks, deleteTask } = useTasks();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -24,32 +26,23 @@ const Dashboard: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     await deleteTask.mutateAsync(id);
-    toast.success('Task deleted');
+    toast.success(t('dashboard.taskDeleted'));
   };
 
   return (
     <>
-      {/* Focus Mode Guide */}
-      <FocusModeGuide
-        isOpen={showFocusGuide}
-        onClose={() => setShowFocusGuide(false)}
-      />
+      <FocusModeGuide isOpen={showFocusGuide} onClose={() => setShowFocusGuide(false)} />
 
       <div className="min-h-screen px-4 py-6 pb-24">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-lg mx-auto">
           <header className="flex items-center justify-between mb-6">
             <div>
-              <p className="text-muted-foreground">Welcome back,</p>
+              <p className="text-muted-foreground">{t('dashboard.welcomeBack')}</p>
               <h1 className="text-2xl font-bold text-foreground">{profile?.full_name || 'Friend'} 👋</h1>
             </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setShowFocusGuide(true)}
-              className="gap-1"
-            >
+            <Button variant="outline" size="sm" onClick={() => setShowFocusGuide(true)} className="gap-1">
               <Shield className="w-4 h-4" />
-              Focus
+              {t('dashboard.focus')}
             </Button>
           </header>
 
@@ -57,17 +50,17 @@ const Dashboard: React.FC = () => {
 
           <div className="flex items-center justify-between mt-8 mb-4">
             <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <Clock className="w-5 h-5 text-primary" /> Upcoming Tasks
+              <Clock className="w-5 h-5 text-primary" /> {t('dashboard.upcomingTasks')}
             </h2>
             <Button onClick={() => setIsCreateOpen(true)} size="sm" className="btn-primary">
-              <Plus className="w-4 h-4 mr-1" /> Add
+              <Plus className="w-4 h-4 mr-1" /> {t('dashboard.add')}
             </Button>
           </div>
 
           {upcomingTasks.length === 0 ? (
             <div className="card-elevated p-8 text-center">
               <span className="text-4xl mb-4 block">🎉</span>
-              <p className="text-muted-foreground">No pending tasks! Create one to stay productive.</p>
+              <p className="text-muted-foreground">{t('dashboard.noTasks')}</p>
             </div>
           ) : (
             <div className="space-y-4">

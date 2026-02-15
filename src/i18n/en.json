@@ -1,0 +1,100 @@
+{
+  "landing": {
+    "tagline": "Beat Procrastination Today",
+    "title": "Deadline",
+    "titleHighlight": "Friend",
+    "subtitle": "Beat procrastination with peer accountability. Complete tasks, submit proof, unlock your potential.",
+    "getStarted": "Get Started Free",
+    "downloadApp": "Download App",
+    "alreadyAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "joinCount": "Join {{count}}+ students crushing their goals",
+    "peerPower": "Peer Power",
+    "peerPowerDesc": "Stay accountable together",
+    "smartGoals": "Smart Goals",
+    "smartGoalsDesc": "Track every deadline",
+    "earnRewards": "Earn Rewards",
+    "earnRewardsDesc": "Points & streaks",
+    "focusLock": "Focus Lock",
+    "focusLockDesc": "Screen locks until done",
+    "aboutTitle": "About Deadline Friend",
+    "aboutText": "We're a team of students who struggled with procrastination ourselves. We built Deadline Friend to help students stay accountable through peer support, AI-powered verification, and gamification. Our mission is to help you unlock your full potential!",
+    "activeUsers": "Active Users",
+    "tasksCompleted": "Tasks Completed",
+    "successRate": "Success Rate",
+    "contactTitle": "Get in Touch",
+    "contactText": "Have questions or feedback? We'd love to hear from you!",
+    "footer": "Built with ❤️ for students."
+  },
+  "login": {
+    "welcomeBack": "Welcome Back",
+    "continueStreak": "Sign in to continue your streak 🔥",
+    "email": "Email",
+    "password": "Password",
+    "signInBtn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "signUpFree": "Sign up free",
+    "welcomeToast": "Welcome back! 👋"
+  },
+  "signup": {
+    "title": "Create Account",
+    "subtitle": "Join the accountability revolution 🚀",
+    "fullName": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "signUpBtn": "Create Account",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+  "dashboard": {
+    "welcomeBack": "Welcome back,",
+    "focus": "Focus",
+    "upcomingTasks": "Upcoming Tasks",
+    "add": "Add",
+    "noTasks": "No pending tasks! Create one to stay productive.",
+    "taskDeleted": "Task deleted"
+  },
+  "tasks": {
+    "title": "My Tasks",
+    "new": "New",
+    "all": "All",
+    "pending": "Pending",
+    "review": "Review",
+    "done": "Done",
+    "noTasks": "No tasks found",
+    "taskDeleted": "Task deleted"
+  },
+  "rewards": {
+    "title": "Rewards",
+    "totalPoints": "Total Points Earned",
+    "badges": "Badges",
+    "unlocked": "✓ Unlocked",
+    "pts": "{{points}} pts"
+  },
+  "profile": {
+    "title": "Profile",
+    "streak": "Streak",
+    "completed": "Completed",
+    "points": "Points",
+    "username": "Username",
+    "fullName": "Full Name",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us about yourself...",
+    "saveChanges": "Save Changes",
+    "signOut": "Sign Out",
+    "profileUpdated": "Profile updated!",
+    "profileError": "Failed to update profile",
+    "language": "Language",
+    "selectLanguage": "Select Language"
+  },
+  "nav": {
+    "home": "Home",
+    "tasks": "Tasks",
+    "rewards": "Rewards",
+    "profile": "Profile",
+    "about": "About",
+    "features": "Features",
+    "contact": "Contact",
+    "backToHome": "← Back to Home"
+  }
+}
