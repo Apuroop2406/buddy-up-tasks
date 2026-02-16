@@ -89,6 +89,13 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({
     };
   };
 
+  const computeFileHash = async (file: File): Promise<string> => {
+    const buffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!taskId || !user) return;
@@ -100,10 +107,28 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({
 
     setIsUploading(true);
     let proofUrl: string | undefined;
+    let fileHash: string | undefined;
 
     try {
       // Upload file if provided
       if (file) {
+        // Compute hash for duplicate detection
+        fileHash = await computeFileHash(file);
+
+        // Check for duplicates across all accounts
+        const { data: duplicates } = await supabase
+          .from('tasks')
+          .select('id, user_id')
+          .eq('proof_hash', fileHash)
+          .neq('user_id', user.id)
+          .limit(1);
+
+        if (duplicates && duplicates.length > 0) {
+          toast.error('This image has already been submitted by another user. Please upload original proof.');
+          setIsUploading(false);
+          return;
+        }
+
         const fileExt = file.name.split('.').pop();
         const fileName = `${user.id}/${taskId}/${Date.now()}.${fileExt}`;
         
@@ -125,6 +150,7 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({
         taskId,
         proofUrl,
         proofText: proofText || undefined,
+        proofHash: fileHash,
       });
 
       setIsUploading(false);
@@ -159,10 +185,10 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({
         toast.error(result.feedback);
       }
 
-      // Close modal after showing result
-      setTimeout(() => {
-        onClose();
+      // Close modal after showing result - let lock context re-evaluate
+      setTimeout(async () => {
         resetForm();
+        onClose();
       }, 3500);
 
     } catch (error) {
