@@ -115,16 +115,19 @@ const SubmitProofModal: React.FC<SubmitProofModalProps> = ({
         // Compute hash for duplicate detection
         fileHash = await computeFileHash(file);
 
-        // Check for duplicates across all accounts
-        const { data: duplicates } = await supabase
-          .from('tasks')
-          .select('id, user_id')
-          .eq('proof_hash', fileHash)
-          .neq('user_id', user.id)
-          .limit(1);
+        // Check for duplicates across all accounts using server function (bypasses RLS)
+        const { data: isDuplicate, error: dupError } = await supabase
+          .rpc('check_duplicate_proof_hash', {
+            p_hash: fileHash,
+            p_user_id: user.id,
+          });
 
-        if (duplicates && duplicates.length > 0) {
-          toast.error('This image has already been submitted by another user. Please upload original proof.');
+        if (dupError) {
+          console.error('Duplicate check error:', dupError);
+        }
+
+        if (isDuplicate) {
+          toast.error('⚠️ This proof has already been submitted by another user. Please upload your own original work.');
           setIsUploading(false);
           return;
         }

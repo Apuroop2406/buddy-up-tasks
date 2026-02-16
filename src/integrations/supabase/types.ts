@@ -240,7 +240,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_duplicate_proof_hash: {
+        Args: { p_hash: string; p_user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       friendship_status: "pending" | "accepted" | "rejected"
