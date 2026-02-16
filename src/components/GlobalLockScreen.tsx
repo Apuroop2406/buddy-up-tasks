@@ -32,7 +32,7 @@ const GlobalLockScreen: React.FC = () => {
   return (
     <>
       <AnimatePresence>
-        {!proofTaskId && (
+        {(
           <motion.div
             className="fixed inset-0 z-[100] bg-background flex items-center justify-center p-4"
             initial={{ opacity: 0 }}
