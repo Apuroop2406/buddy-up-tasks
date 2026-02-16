@@ -151,6 +151,7 @@ export type Database = {
           description: string | null
           id: string
           points_earned: number | null
+          proof_hash: string | null
           proof_text: string | null
           proof_url: string | null
           reminder_sent: boolean | null
@@ -171,6 +172,7 @@ export type Database = {
           description?: string | null
           id?: string
           points_earned?: number | null
+          proof_hash?: string | null
           proof_text?: string | null
           proof_url?: string | null
           reminder_sent?: boolean | null
@@ -191,6 +193,7 @@ export type Database = {
           description?: string | null
           id?: string
           points_earned?: number | null
+          proof_hash?: string | null
           proof_text?: string | null
           proof_url?: string | null
           reminder_sent?: boolean | null

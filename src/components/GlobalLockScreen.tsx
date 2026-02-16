@@ -25,6 +25,8 @@ const GlobalLockScreen: React.FC = () => {
     setProofTaskId(null);
     setIsSubmittingProof(false);
     await refreshTasks();
+    // Stay on lock screen - don't navigate anywhere
+    // The lock state will automatically clear if the task was approved
   };
 
   return (

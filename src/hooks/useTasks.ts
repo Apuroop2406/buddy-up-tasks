@@ -91,12 +91,13 @@ export const useTasks = () => {
   });
 
   const submitProof = useMutation({
-    mutationFn: async ({ taskId, proofUrl, proofText }: { taskId: string; proofUrl?: string; proofText?: string }) => {
+    mutationFn: async ({ taskId, proofUrl, proofText, proofHash }: { taskId: string; proofUrl?: string; proofText?: string; proofHash?: string }) => {
       const { data, error } = await supabase
         .from('tasks')
         .update({
           proof_url: proofUrl,
           proof_text: proofText,
+          proof_hash: proofHash,
           status: 'submitted' as TaskStatus,
           submitted_at: new Date().toISOString(),
         })
