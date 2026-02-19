@@ -31,11 +31,11 @@ const Header: React.FC<HeaderProps> = ({ variant = 'landing' }) => {
               whileHover={{ scale: 1.05, rotate: 5 }}
               className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md"
             >
-              <span className="text-xl">🎯</span>
+              <span className="text-xl">⏰</span>
             </motion.div>
             <div className="flex flex-col">
               <span className="text-xl font-extrabold text-foreground leading-tight">
-                Deadline<span className="text-gradient">Friend</span>
+                Deadline<span className="text-gradient">Buddy</span>
               </span>
               <span className="text-[10px] text-muted-foreground font-medium -mt-0.5">
                 {t('landing.tagline')}
