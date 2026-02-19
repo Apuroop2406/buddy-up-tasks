@@ -48,7 +48,7 @@ const Landing: React.FC = () => {
             transition={{ type: 'spring', delay: 0.2, stiffness: 200 }}
             className="w-24 h-24 mx-auto mb-8 rounded-3xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-xl relative"
           >
-            <span className="text-5xl">🎯</span>
+            <span className="text-5xl">⏰</span>
             <motion.div
               className="absolute -inset-2 rounded-3xl bg-gradient-to-br from-primary/30 to-accent/30 -z-10 blur-xl"
               animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
@@ -147,11 +147,11 @@ const Landing: React.FC = () => {
         <footer className="max-w-lg mx-auto text-center pt-8 border-t border-border">
           <div className="flex items-center justify-center gap-2 mb-3">
             <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
-              <span className="text-xs">🎯</span>
+              <span className="text-xs">⏰</span>
             </div>
-            <span className="font-bold text-foreground">Deadline Friend</span>
+            <span className="font-bold text-foreground">Deadline Buddy</span>
           </div>
-          <p className="text-xs text-muted-foreground">© 2026 Deadline Friend. {t('landing.footer')}</p>
+          <p className="text-xs text-muted-foreground">© 2026 Deadline Buddy. {t('landing.footer')}</p>
         </footer>
       </div>
     </div>
